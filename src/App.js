@@ -206,7 +206,7 @@ function App() {
   return (
     <div
       className="min-h-screen bg-cover bg-center flex items-center justify-end pr-[1%]"
-      style={{ backgroundImage: "url('/bg.jpg')" }}
+      style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/bg.jpg)` }}
     >
       <div className="max-w-md w-full bg-[#1b2f2b]/90 backdrop-blur-lg border border-white/10 rounded-3xl shadow-2xl p-8">
 
