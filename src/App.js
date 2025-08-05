@@ -136,7 +136,7 @@ function App() {
   const [trivandrumFile, setTrivandrumFile] = useState(null);
   const [kochiFile, setKochiFile] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState("");
-  const [selectedYear, setSelectedYear] = useState("2025"); // Default to 2025
+  const [selectedYear, setSelectedYear] = useState(""); // Changed from "2025" to ""
   const [status, setStatus] = useState("");
 
   const handleTrivandrumChange = (e) => {
@@ -295,7 +295,7 @@ function App() {
             <option value="December">December</option>
           </select>
 
-          {/* Year Selector */}
+          {/* Year Selector (dynamic) */}
           <label className="block mb-1 font-semibold">📆 Select Year</label>
           <select
             value={selectedYear}
@@ -303,9 +303,14 @@ function App() {
             className="w-full mb-4 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
           >
             <option value="">-- Select Year --</option>
-            <option value="2024">2024</option>
-            <option value="2025">2025</option>
-            <option value="2026">2026</option>
+            {Array.from({ length: 10 }, (_, i) => {
+              const year = 2023 + i;
+              return (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              );
+            })}
           </select>
 
           {/* Download Button */}
