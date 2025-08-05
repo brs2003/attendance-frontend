@@ -128,7 +128,6 @@
 // }
 
 // export default App;
-
 import { useState } from "react";
 import { CloudArrowUpIcon } from "@heroicons/react/24/solid";
 import logo from "./assets/download.png";
@@ -137,6 +136,7 @@ function App() {
   const [trivandrumFile, setTrivandrumFile] = useState(null);
   const [kochiFile, setKochiFile] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState("");
+  const [selectedYear, setSelectedYear] = useState("2025"); // Default to 2025
   const [status, setStatus] = useState("");
 
   const handleTrivandrumChange = (e) => {
@@ -179,13 +179,21 @@ function App() {
   };
 
   const handleDownload = async () => {
-    if (!selectedMonth) {
-      alert("Please select a month.");
+    if (!selectedMonth || !selectedYear) {
+      alert("Please select both month and year.");
       return;
     }
 
+    const monthMap = {
+      January: "01", February: "02", March: "03", April: "04",
+      May: "05", June: "06", July: "07", August: "08",
+      September: "09", October: "10", November: "11", December: "12"
+    };
+
+    const formattedMonth = `${selectedYear}-${monthMap[selectedMonth]}`;
+
     try {
-      const response = await fetch(`https://attendance-backend-cz9g.onrender.com/download?month=${selectedMonth}`, {
+      const response = await fetch(`https://attendance-backend-cz9g.onrender.com/download?month=${formattedMonth}`, {
         method: "GET",
       });
 
@@ -195,7 +203,7 @@ function App() {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `attendance_report_${selectedMonth}.xlsx`;
+      a.download = `attendance_report_${formattedMonth}.xlsx`;
       a.click();
       window.URL.revokeObjectURL(url);
     } catch (err) {
@@ -265,7 +273,8 @@ function App() {
 
         {/* Download Section */}
         <div className="mt-6 bg-green-50 p-4 rounded-lg shadow-inner text-black">
-          <label className="block mb-2 font-semibold">📅 Select Month for Report</label>
+          {/* Month Selector */}
+          <label className="block mb-1 font-semibold">📅 Select Month</label>
           <select
             value={selectedMonth}
             onChange={(e) => setSelectedMonth(e.target.value)}
@@ -286,6 +295,20 @@ function App() {
             <option value="December">December</option>
           </select>
 
+          {/* Year Selector */}
+          <label className="block mb-1 font-semibold">📆 Select Year</label>
+          <select
+            value={selectedYear}
+            onChange={(e) => setSelectedYear(e.target.value)}
+            className="w-full mb-4 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          >
+            <option value="">-- Select Year --</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            <option value="2026">2026</option>
+          </select>
+
+          {/* Download Button */}
           <button
             onClick={handleDownload}
             className="w-full px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-md transition-all"
@@ -316,4 +339,3 @@ function App() {
 }
 
 export default App;
-
